@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+    <a href="#" @click="one">get</a>
+    <a href="#" @click='two'>post</a>
+    <a href="#" @click='jsonp()'>jsonp</a>
+    {{result}}
+    </div>
+
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-resource/dist/vue-resource.js"></script>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                result: 'jieguo'
+            },
+            methods: {
+                one() {
+                    //发送get请求
+                    this.$http.get('package.json').then(function (res) {
+                        this.result=res.body
+                    }, function () {
+                        console.log('请求失败处理');
+                    });
+                },
+                two() {
+                    this.$http.post('package',{emulateJSON:true}).then(function(res){
+                    this.result=res.body   
+                },function(res){
+                    console.log(res.status);
+                });
+                }
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>

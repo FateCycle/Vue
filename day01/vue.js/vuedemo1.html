@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .divcss {
+            background-color: yellow;
+            width: 200px;
+            height: 200px;
+        }
+
+        .box1 {
+            color: red
+        }
+
+        .box2 {
+            background: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <h1>helloworld实例:</h1>
+        <hr />
+        <h2>{{1+1}}</h2>
+        <h2>{{'hello'+'world'}}</h2>
+        <h2>{{message}}</h2>
+        <h2>{{message}}</h2>
+        <h2>{{message}}</h2>
+        <h2>{{message}}</h2>
+        <input type="text" v-model='message'>
+        <hr />
+        <h1>姓名展示:</h1>
+
+        姓氏:<input type='text' value="潘" v-model='lastname' />
+        </br>
+        名字:<input type='text' value="夏开" v-model='firstname' />
+        <p id='fullname'>{{lastname+firstname}}</p>
+        <h1>计数:</h1>
+        <hr />
+        <p>{{number}}</p>
+        <button v-on:click="increment">点击加1</button>
+        <h1>购物车:</h1>
+        <hr />
+        商品价格:<input type="text" v-model=price>
+        <br />
+        <label>商品数量:</label>
+        <button v-on:click='handleCountClick'>-</button><span>{{count}}</span><button v-on:click=count++>+</button>
+        <br />
+        <strong>总价格:{{count*price}}</strong>
+        <h1>计算器</h1>
+        <input type="text" v-model='number1'>
+        <select v-model="operation">
+            <option value='0'>+</option>
+            <option value='1'>-</option>
+            <option value='2'>*</option>
+            <option value='3'>/</option>
+        </select>
+        <input type="text" v-model='number2'>
+        <button v-on:click='calculate'>=</button>
+        <p>{{result}}</p>
+        <h1>语法测试:</h1>
+        <hr />
+        <a v-bind:href='"foo"'>{{foo+'foo'}}</a>
+        <h1>单项和双向绑定</h1>
+        <hr />
+        单向绑定:<input type="text" :value="message">
+        双向绑定:<input type="text" v-model="message">
+        <br />
+        单向绑定<input type="checkbox" :checked="seen">
+        双向绑定<input type="checkbox" v-model="seen">
+        <br />根据复选框来显示<div class='divcss' v-if="seen"></div>
+        <input type="number" v-model.number="digit">
+        <h1>自定义指令</h1>
+        <hr />
+        <input type="checkbox" name="" id="" v-model="display">display
+        <div v-myshow v-if="display">
+            <span>{{info}}</span>
+        </div>
+        <div v-myshow v-if="display">
+            <span>{{info}}</span>
+        </div>
+        <div v-myshow v-if="display">
+            <span>{{info}}</span>
+        </div>
+        <h1>数组的过滤</h1>
+        <hr>
+        <input type="text" v-model='inputText'><button @click="filterText=inputText">搜索</button>
+        <input type="radio" value ='' v-model="sex">全部
+        <input type="radio" value='男'v-model="sex">男
+        <input type="radio" value='女'v-model="sex">女
+        <br>
+        <table>
+            <thead>
+                <tr>
+                    <td>id</td>
+                    <td>姓名</td>
+                    <td>性别</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in filterUser">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.sex}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h1 v-my-bind:title="bindText">{{bindText}}</h1>
+        <input type="text" v-model='bindText'>
+        <input type="checkbox" name="" id="" v-model="toggle1">toggle1
+        <input type="checkbox" name="" id="" v-model="toggle2">toggle2
+        <h2 v-my-bind:class="{box1:toggle1,box2:toggle2}">niubi</h2>
+        <h1>vue-resource ajax请求</h1>
+        <hr>
+        <a href="#" v-on:click="one()">get</a>
+        <a href="#" @click="two">post</a>
+        <a href="#" @click='jsonp'>jsonp</a>
+        {{result}}
+    </div>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vue-resource/dist/vue-resource.js"></script>
+    <script>
+
+        users=[
+            {
+                id:'1',
+                name:'jack',
+                sex:'男'         
+            },
+            {
+                id:'1',
+                name:'mike',
+                sex:'男'
+
+            },
+            {
+                id:'3',
+                name:'mary',
+                sex:'女'
+            },            {
+                id:'4',
+                name:'John',
+                sex:'男'
+            },            {
+                id:'5',
+                name:'Lisa',
+                sex:'女'
+            },
+        ]
+
+
+
+        Vue.directive('my-bind', function (el, binding) {
+            if (binding.arg === 'class') {
+                for (let key in binding.value) {
+                    binding.value[key] ?
+                        el.classList.add(key) : el.classList.remove(key);
+                }
+                return;
+            }
+            el.setAttribute(binding.arg, binding.value);
+        })
+        Vue.directive('myshow', {
+            bind(el, binding) {
+                el.timer = setInterval(() => console.log(1), 1000);
+                console.log(el);
+                console.log("this is bind", el.parentNode);
+            },
+            inserted(el, binding) {
+                console.log("this is insert", el.parentNode);
+            },
+            update(el, binding, vnode, oldVnode) {
+                console.log('这是',this);
+                console.log(el);
+                // console.log("this is update", vnode.children[0], oldVnode.children[0], el.innerHTML);
+
+            },
+            componentUpdated(el, binding, vnode, oldVnode) {
+                console.log(el);
+                //console.log("this is componentUpdated", vnode.children[0], oldVnode.children[0], el.innerHTML);
+            },
+            unbind(el) {
+                clearInterval(el.timer);
+            }
+
+        })
+
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                message: 'hello vue.js',
+                firstname: '夏开',
+                lastname: '潘',
+                number: 0,
+                price: 5,
+                count: 2,
+                number1: 2,
+                number2: 3,
+                operation: '0',
+                result: 7,
+                foo: '666',
+                message: 'haha',
+                seen: true,
+                digit: 10,
+                display: true,
+                info: 'hello',
+                method: 'post',
+                bindText: '9999',
+                toggle1: true,
+                toggle2: true,
+                users,
+                sex:'男',
+                filterText:'',
+                inputText:'',
+                result:'66666',
+            },
+            computed:{
+                filterUser(){
+                    return this.users.filter(elem=>elem.name.includes(this.filterText)&&elem.sex.includes(this.sex))
+                }
+            },
+            methods: {
+                increment: function () {
+                    this.number++;
+                },
+                handleCountClick() { //简写形式
+                    this.count = this.count - 1 < 0 ? 0 : this.count - 1;
+                },
+                calculate() {
+
+                    if (this.operation === '0') this.result = this.number1 + this.number2;
+                    else if (this.operation === '1') this.result = this.number1 - this.number2;
+                    else if (this.operation === '2') this.result = this.number1 * this.number2;
+                    else this.result = this.number1 / this.number2;
+                },
+                one(){
+                    // this.$http.get('package.json',{
+                    //     params:{
+                    //         userId:"102",
+                    //     },
+                    //     headers:{
+                    //         token:'abcd',
+                    //     }
+                    // }).then((res)=>this.result=res.body,(res)=>this.result=res.status)
+                    this.$http.get('package.json').then(function (res) {
+                        this.result=res.body
+                    }, function () {
+                        console.log('请求失败处理');
+                    });
+                },
+                two(){
+                    this.$http.post('package.json',
+                    {
+                        userId:"102"   
+                    },{
+                        headers:
+                        {
+                            token:'abrf',
+                        }
+                    }).then((res)=>this.result=res.result);
+                }
+                
+            }
+        });
+    </script>
+</body>
+
+</html>

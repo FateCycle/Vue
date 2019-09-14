@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        这是头部
+    </div>
+    <div class="aside">
+        这是侧边栏
+    </div>
+    <form  id='form1'>
+       
+        <div>
+            <label for='title'>标题</label>
+            <input name="title" type='text' id='title'/>
+        </div>
+
+        <div>
+        <input type='submit' value="保存">
+        </div>
+    </form>
+    <script src="../../node_modules/jquery/dist/jquery.js"> </script>
+    <script>
+        $('#form1').on('submit',handleAddsubmit);
+        function handleAddsubmit(e){
+            e.preventDefault();
+            console.log(this);
+            console.log($(this));
+            console.log($(this).serialize());
+            $.post('http://127.0.0.1:3000/todos',$(this).serialize(),(data)=>{
+                window.location.href="/fe-proj/index.html";
+            })
+        }
+    </script>
+</body>
+</html>

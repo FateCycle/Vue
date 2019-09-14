@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="header">
+        这是头部
+    </div>
+    <div class="aside">
+        这是侧边栏
+    </div>
+    <a href="todo/add.html">增加</a>
+    <ul>
+    </ul>
+    <!-- #开头是可以阻止超链接的默认跳转 -->
+    <a href='#/'>我的音乐</a>
+    <a href='#/findmusic'>发现音乐</a>
+    <a href='#/myfriend'>我的朋友</a>
+    <div id='container'></div>
+</body>
+<script src="../node_modules/art-template/lib/template-web.js"></script>
+<script src="../node_modules/jquery/dist/jquery.js"></script>
+<script id='tql' type="text/template">
+    {{each todoList}}
+    <li>{{$value}}</li>
+    {{/each}}
+</script>
+<script>
+    $.get('http://127.0.0.1:3000/todos', (data) => {
+        console.log(data);
+        var html = template('tql', {
+            todoList: data,
+        });
+        console.log(html);
+        $("ul").html(html);
+    });
+
+    //监听锚点
+    window.onhashchange=()=>{
+        var hash=window.location.hash.substr(1);
+        if(hash==='/'){
+            $.get('./mymusic.html',(data)=>{
+                console.log(data);
+                $('#container').html(data);
+            });
+        }else if(hash==='/findmusic'){
+            $.get('./findmusic.html',(data)=>{
+                $('#container').html(data);
+            });
+        }else if(hash='/myfriend'){
+            $.get('./friends.html',(data)=>{
+                $('#container').html(data);
+            });
+        }
+    }    
+</script>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id='app'>
+        <my-component></my-component>
+        <test-component></test-component>
+    </div>
+   
+
+    </div>
+    <script src="node_modules/vue/dist/vue.js">
+
+    </script>
+    <script type="text/x-template" id='x'>    <h1>我是天才</h1></script>
+    <script>
+
+       const c= Vue.component('test-component',{
+            template:`
+            <div>
+            <h1>{{message}}</h1>
+            <input type='text' v-model="message"/><button @click='handle'>提交</button>
+            <input type="checkbox" v-model="checked">
+            <div style="background: brown;width:200px;height:200px" v-if="checked">
+                </div>
+            </div>
+            `,
+            data(){
+                return {
+                    message:"这是一个message",
+                    checked:true
+                    
+                }
+            },
+            methods:{
+                handle(){
+                    window.alert(this.message);
+                }
+            }
+
+        })
+
+        Vue.component('my-component',{
+            template:'#x'
+        })
+
+
+        const instance=new Vue({
+            el:"#app",
+            data:{
+                title:'wudi'
+
+            }
+        })
+        instance.visible=false;
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .done {
+            text-decoration: mediumblue line-through;
+            color: darkgray;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id='app'>
+        <h1>Todo</h1>
+        <p>{{todos.filter(item=>!item.done).length}} of {{todos.length}} remaning <a href="#"
+                @click='handleStatusTodoClick'>[archieve]</a></p>
+        <p v-for='(item,index) in todos'>
+            <input type="checkbox" v-model='item.done'>
+            <span v-bind:class='{done:item.done}'>{{item.title}}</span>
+            <button @click='handleRemoveTodoClick(index)'>X</button>
+        </p>
+        <input type="text" v-model='todoText' @keydown.enter='handleAddTodoClick'><button
+            @click='handleAddTodoClick'>Add</button>
+    </div>
+
+</body>
+<script src='node_modules/vue/dist/vue.js'></script>
+<script>
+    const todos = [{
+            id: 1,
+            title: '吃饭',
+            done: true
+        },
+        {
+            id: 2,
+            title: '睡觉',
+            done: false
+        },
+        {
+            id: 3,
+            title: '写代码',
+            done: true,
+        }
+    ];
+
+    new Vue({
+        el: '#app',
+        data: {
+            todos,
+            todoText: '',
+        },
+        methods: {
+            handleAddTodoClick() {
+                this.todos.push({
+                    id: this.todos.slice(-1).id + 1,
+                    title: this.todoText,
+                    done: false,
+                })
+            },
+            handleRemoveTodoClick(index) {
+                this.todos.splice(index, 1)
+            },
+            handleStatusTodoClick() {
+                this.todos.forEach(element => {
+                    element.done = false;
+                });
+            }
+        }
+
+    })
+</script>
+
+</html>

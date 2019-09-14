@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vuex</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/vuex/dist/vuex.js"></script>
+</head>
+<body>
+<div id='app'>
+    <span>{{num}}</span>
+    <button @click='add'>点击加一</button>
+    <button @click='sub'>点击减一</button>
+    <son-component>
+    </son-component>
+</div>
+
+
+    <script>
+        const sonComponent={
+            template:`<div>
+                count={{times}}
+                count*2={{doubleCount}}
+                </div>`,
+            computed:{
+                times(){
+                    return this.$store.state.count;
+                },
+                doubleCount(){
+                    return this.$store.getters.modeifyCount;
+                }
+
+            }
+        }
+        const store=new Vuex.Store({
+            state:{
+                count:0,
+            },
+            getters:{
+                modeifyCount(state){return state.count*2}
+            },
+            mutations:{
+                increment(state){
+                    state.count++;
+                },
+                reduction(state){
+                    state.count--
+                }
+                
+            },
+            actions:{
+                reduction(context){
+                    context.commit({
+                        type:'reduction'
+                    })
+                }
+            }
+        })
+        new Vue({
+            el:'#app',
+            computed:{
+                num(){return store.state.count}
+            },
+            store,
+            methods:{
+                add(){
+                   store.commit('increment');
+                },
+                sub(){
+                    store.dispatch('reduction');
+                }
+
+            },
+            components:{
+                sonComponent
+            }
+        })
+        
+    </script>
+
+
+</body>
+</html>

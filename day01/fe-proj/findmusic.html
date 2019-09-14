@@ -1,0 +1,21 @@
+<div>
+    发现音乐
+    <ul>
+
+    </ul>
+</div>
+
+<script id='tpl-todos' type="text/template">
+    {{each todoList}}
+    <li>{{$value.title}}</li>
+    {{/each}}
+</script>
+
+<script>
+    $.get('http://127.0.0.1:3000/todos',(data)=>{
+        var html=template('tpl-todos',{
+            todoList:data,
+        });
+        $('ul').html(html);
+    });
+</script>
